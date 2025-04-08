@@ -6,6 +6,7 @@ type Issue = {
   };
 };
 // TODO: Add more fields as needed
+// FIXME: Add more fields as needed
 const App: React.FC = () => {
   const [issueData, setIssueData] = useState<Issue | null>(null);
 
