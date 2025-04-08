@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
 
-function App() {
+type Issue = {
+  fields: {
+    summary: string;
+  };
+};
+// TODO: Add more fields as needed
+const App: React.FC = () => {
+  const [issueData, setIssueData] = useState<Issue | null>(null);
+
+  useEffect(() => {
+    const fetchIssue = async () => {
+      try {
+        const response = await fetch("/rest/api/3/issue/SCRUM-1");
+        if (!response.ok) {
+          throw new Error("Failed to fetch issue data");
+        }
+        const data: Issue = await response.json();
+        setIssueData(data);
+      } catch (error) {
+        console.error("Error fetching issue:", error);
+      }
+    };
+
+    fetchIssue();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h2>VARMA Jira Plugin - Issue Details</h2>
+      {issueData ? (
+        <p>Summary: {issueData.fields.summary}</p>
+      ) : (
+        <p>Loading issue details...</p>
+      )}
     </div>
   );
-}
+};
 
 export default App;
